@@ -339,20 +339,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "04cbf5b083de1c7e0222a7a51dbfdba1cbe1c6ab0b15e29fff3f6c077fd9cd9f"
 
 [[package]]
-name = "maint"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "base64",
- "clap",
- "indicatif",
- "serde",
- "sha2",
- "toml",
- "ureq",
-]
-
-[[package]]
 name = "memchr"
 version = "2.7.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -572,6 +558,20 @@ dependencies = [
  "serde_spanned",
  "toml_datetime",
  "winnow",
+]
+
+[[package]]
+name = "twolkit"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "base64",
+ "clap",
+ "indicatif",
+ "serde",
+ "sha2",
+ "toml",
+ "ureq",
 ]
 
 [[package]]

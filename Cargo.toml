@@ -1,7 +1,7 @@
 cargo-features = ["edition2024"]
 
 [package]
-name = "maint"
+name = "twolkit"
 version = "0.1.0"
 edition = "2024"
 description = "Maintainer utilities for 2"

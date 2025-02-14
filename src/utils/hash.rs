@@ -2,7 +2,7 @@
 
 use sha2::{Sha256, Digest};
 use anyhow::Result;
-use base64::{engine::general_purpose::STANDARD, Engine};
+use base64::{engine::general_purpose::URL_SAFE_NO_PAD, Engine};
 use std::{
     fs::{create_dir, File}, io::Read
 };
@@ -18,15 +18,10 @@ fn twohash(file_path: &str) -> Result<String> {
 
     while let Ok(n) = file.read(&mut buf) {
         if n == 0 { break }
-        hasher.update(&buf[..n])
+        hasher.update(&buf[..n]);
     }
 
-    let hash = hasher.finalize();
-    let b64_hash = STANDARD.encode(hash);
-
-    Ok(
-        b64_hash.replace('+', "-").replace('/', "_").trim_end_matches("=").to_string()
-    )
+    Ok(URL_SAFE_NO_PAD.encode(hasher.finalize()))
 }
 
 pub fn linkhash(url: &str, p: &Package) -> String {

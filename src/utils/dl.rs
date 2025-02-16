@@ -70,18 +70,6 @@ pub fn download(url: &str, out: &str) -> Result<PathBuf> {
     Ok(file_path.to_path_buf())
 }
 
-fn download_extra(p: &Package) -> Result<()> {
-    let extra = p.extra.clone().unwrap_or_default();
-
-    extra.iter().for_each(|l| {
-        let f = l.url.rsplit_once('/').map(|(_, name)| name.to_string()).unwrap();
-        let out = &format!("{}/.sources/{f}", p.dir());
-        download(&l.url, out).expect(&format!("Failed to download extra from '{}'", l.url));
-    });
-
-    Ok(())
-}
-
 pub fn normalize_tarball(p: &Package, tb: &str) -> String {
     let ext = tb.rsplit_once(".t")
         .map(|(_, ext)| format!(".t{ext}"))
@@ -118,7 +106,7 @@ fn download_tarball(p: &Package) -> Result<Option<String>> {
     fs::create_dir_all(&srcpath).expect("Failed to create source path");
 
     let out = format!("{srcpath}/{file_name}");
-    download(url, &out).expect(&format!("Failed to download tarball from '{url}'"));
+    download(url, &out).unwrap_or_else(|_| panic!("Failed to download tarball from '{url}'"));
     Ok(Some(out))
 }
 

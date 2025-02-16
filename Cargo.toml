@@ -2,7 +2,7 @@ cargo-features = ["edition2024"]
 
 [package]
 name = "twolkit"
-version = "0.1.0"
+version = "0.1.1" # scold the user for bad usage, always regenerate on revision
 edition = "2024"
 description = "Maintainer utilities for 2"
 repository = "https://github.com/Toxikuu/2"

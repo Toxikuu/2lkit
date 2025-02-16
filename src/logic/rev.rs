@@ -7,9 +7,7 @@ use crate::shell::live::exec;
 use crate::structs::package::Package;
 use crate::msg;
 
-pub fn rev(package: &Package) -> Result<bool> {
-    let mut regen_needed = false;
-
+pub fn rev(package: &Package) -> Result<()> {
     let name = &package.name;
     let dir = package.dir();
     let build_path = Path::new(&dir).join("BUILD");
@@ -36,24 +34,21 @@ pub fn rev(package: &Package) -> Result<bool> {
         declare -p > /tmp/2/m-diffs/pre
 
         "${{EDITOR:-/usr/bin/nvim}}" BUILD
-        unset NAME VERS SOURCE UPST VCMD EXTRA
+        # unset in case any of these are deleted
+        unset NAME VERS SOURCE UPST VCMD EXTRA DESC DEPS
 
         source BUILD
         declare -p > /tmp/2/m-diffs/post
 
         diff /tmp/2/m-diffs/p{{re,ost}} > /tmp/2/m-diffs/diffs
 
-        # TODO: scold the user if they change NAME or VERS
-
-        changes=$(grep -E 'NAME|VERS|SOURCE|UPST|VCMD|EXTRA' /tmp/2/m-diffs/diffs | wc -l)
-        echo "$changes" > /tmp/2/m-diffs/ct
+        if grep -E 'NAME|VERS' /tmp/2/m-diffs/diffs; then
+            echo -e "\x1b[31;1mBad maintainer!!\nYou do not change \$NAME or \$VERS when revising packages.\nUse the correct flags if you want to move or update a package.\x1b[0m"
+            exit 2 # bad usage
+        fi
     "#);
 
     sesh(command)?;
-
-    if fs::read_to_string("/tmp/2/m-diffs/ct").unwrap_or_default().trim() != "0" {
-        regen_needed = true
-    }
 
     let contents = fs::read_to_string(&build_path)?;
     let lines = contents.lines();
@@ -85,5 +80,5 @@ pub fn rev(package: &Package) -> Result<bool> {
     exec(command)?;
     msg!("Done!");
 
-    Ok(regen_needed)
+    Ok(())
 }

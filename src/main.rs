@@ -29,9 +29,8 @@ fn main() {
         let p = MaintArg::new(p);
         let mut p = Package::new(p.repo, p.name).expect("Failed to form package");
 
-        if logic::rev::rev(&p).expect("Failed to revise package") {
-            logic::r#gen::r#gen(&mut p).expect("Failed to generate package");
-        }
+        logic::rev::rev(&p).expect("Failed to revise package");
+        logic::r#gen::r#gen(&mut p).expect("Failed to generate package");
     });
 
     args.update.iter().for_each(|p| {

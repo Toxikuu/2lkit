@@ -62,4 +62,17 @@ fn main() {
         let mut to = Package::new(to.repo, to.name).expect("Failed to form package");
         logic::r#gen::r#gen(&mut to).expect("Failed to generate package");
     }
+
+    if !args.cp.is_empty() {
+        let from = args.cp.first().expect("Invalid syntax");
+        let from = MaintArg::new(from);
+        let from = Package::new(from.repo, from.name).expect("Failed to form package");
+
+        let to = args.cp.last().expect("Invalid syntax");
+        let to = MaintArg::new(to);
+
+        logic::cp::cp(&from, &to).expect("Failed to copy package");
+        let mut to = Package::new(to.repo, to.name).expect("Failed to form package");
+        logic::r#gen::r#gen(&mut to).expect("Failed to generate package");
+    }
 }

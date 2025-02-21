@@ -2,7 +2,7 @@ cargo-features = ["edition2024"]
 
 [package]
 name = "twolkit"
-version = "0.2.0" # tracked more fields, misc improvements, migrations
+version = "0.2.1" # added fields to template, added copy
 edition = "2024"
 description = "Maintainer utilities for 2"
 repository = "https://github.com/Toxikuu/2"

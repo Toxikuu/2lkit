@@ -23,7 +23,9 @@ pub fn add(package: &MaintArg) -> Result<()> {
 r#"NAME="{name}"
 VERS="{version}"
 DESC=""
+CATG=""
 UPST=""
+DEPS=()
 
 SOURCE=""
 EXTRA=()

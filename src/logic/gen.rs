@@ -11,7 +11,7 @@ pub fn r#gen(package: &mut Package) -> Result<()> {
     package.source = package.source.as_ref().map(|src| src.hash(package));
     package.extra = package.extra.as_ref().map(|extras| extras.iter().map(|s| s.hash(package)).collect::<Vec<_>>());
 
-    msg!("Generating info.lock for {package}");
+    msg!("Generating LOCK for {package}");
     package.write()?;
 
     let dir = package.dir();
@@ -26,7 +26,7 @@ pub fn r#gen(package: &mut Package) -> Result<()> {
         # Bail if nothing changed
         [ -z "$(git status -s .)" ] && exit 0
 
-        git add info.lock
+        git add LOCK
         TIMESTAMP=$(date -u "+%Y-%m-%d %H:%M:%S")
         COMMIT=$(git commit -qm "$MSG" && git rev-parse HEAD)
 

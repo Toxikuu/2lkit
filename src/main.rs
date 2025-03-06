@@ -27,9 +27,12 @@ fn main() {
 
     args.revise.iter().for_each(|p| {
         let p = MaintArg::new(p);
-        let mut p = Package::new(p.repo, p.name).expect("Failed to form package");
+        let p = Package::new(p.repo, p.name).expect("Failed to form package");
 
         logic::rev::rev(&p).expect("Failed to revise package");
+
+        // reform the package to update any new variables
+        let mut p = Package::new(&p.repo, &p.name).expect("Failed to form package");
         logic::r#gen::r#gen(&mut p).expect("Failed to generate package");
     });
 
@@ -41,7 +44,9 @@ fn main() {
         let mut new = old;
         new.version = vers;
 
-        logic::r#gen::r#gen(&mut new).expect("Failed to generate package");
+        // reform the package to update any new variables
+        let mut p = Package::new(&new.repo, &new.name).expect("Failed to form package");
+        logic::r#gen::r#gen(&mut p).expect("Failed to generate package");
     });
 
     args.remove.iter().for_each(|p| {
@@ -74,5 +79,17 @@ fn main() {
         logic::cp::cp(&from, &to).expect("Failed to copy package");
         let mut to = Package::new(to.repo, to.name).expect("Failed to form package");
         logic::r#gen::r#gen(&mut to).expect("Failed to generate package");
+    }
+
+    if !args.alias.is_empty() {
+        let origin = args.alias.first().expect("Invalid syntax");
+        let origin = MaintArg::new(origin);
+        let origin = Package::new(origin.repo, origin.name).expect("Failed to form package");
+
+        let alias = args.alias.last().expect("Invalid syntax");
+        let alias = MaintArg::new(alias);
+
+        logic::alias::alias(&origin, &alias).expect("Failed to alias package");
+        // shouldn't need regeneration
     }
 }

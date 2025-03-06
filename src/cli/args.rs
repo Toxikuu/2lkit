@@ -11,6 +11,9 @@ pub struct Args {
     #[arg(short = 'a', long, value_name = "REPO/NAME=VERS", value_delimiter = ' ', num_args = 1..)]
     pub add: Vec<String>,
 
+    #[arg(short = 'A', long, value_name = "REPO/NAME", value_delimiter = ' ', num_args = 2)]
+    pub alias: Vec<String>,
+
     #[arg(short = 'r', long, value_name = "REPO/NAME", value_delimiter = ' ', num_args = 1..)]
     pub revise: Vec<String>,
 

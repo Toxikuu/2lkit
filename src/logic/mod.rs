@@ -1,4 +1,5 @@
 pub mod add;
+pub mod alias;
 pub mod cp;
 pub mod r#gen;
 pub mod r#move;

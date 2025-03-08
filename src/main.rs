@@ -92,4 +92,12 @@ fn main() {
         logic::alias::alias(&origin, &alias).expect("Failed to alias package");
         // shouldn't need regeneration
     }
+
+    if !args.restore.is_empty() {
+        let p = args.restore.first().expect("Invalid syntax");
+        let p = MaintArg::new(p);
+
+        let commit = args.restore.last().expect("Invalid syntax");
+        logic::restore::restore(&p, commit).expect("Failed to restore package");
+    }
 }

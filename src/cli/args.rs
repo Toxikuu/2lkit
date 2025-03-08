@@ -28,6 +28,10 @@ pub struct Args {
 
     #[arg(short = 'c', long, value_name = "REPO/NAME", value_delimiter = ' ', num_args = 2)]
     pub r#cp: Vec<String>,
+
+    // this won't have a short version as it should (hopefully) be used rarely
+    #[arg(long, value_names = ["REPO/NAME", "COMMIT"], value_delimiter = ' ', num_args = 2)]
+    pub restore: Vec<String>,
 }
 
 impl Args {

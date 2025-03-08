@@ -5,5 +5,6 @@ pub mod r#gen;
 pub mod r#move;
 pub mod newrepo;
 pub mod rev;
+pub mod restore;
 pub mod rm;
 pub mod upd;

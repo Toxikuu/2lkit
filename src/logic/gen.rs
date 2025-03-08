@@ -24,7 +24,7 @@ pub fn r#gen(package: &mut Package) -> Result<()> {
         MSG="Generated {name}={version}"
 
         # Bail if nothing changed
-        [ -z "$(git status -s .)" ] && exit 0
+        [ -z "$(git status -s)" ] && exit 0
 
         git add LOCK
         TIMESTAMP=$(date -u "+%Y-%m-%d %H:%M:%S")

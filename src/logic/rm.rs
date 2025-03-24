@@ -19,7 +19,7 @@ pub fn rm(package: &Package) -> Result<()> {
     fs::remove_dir_all(&dir).expect("Nothing was removed");
 
     let command = &format!(r#"
-        cd "/usr/ports/{repo}"
+        cd "/var/ports/{repo}"
 
         git rm -r "{name}"
         git commit -qm "Removed {name}={version}"

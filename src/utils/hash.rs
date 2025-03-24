@@ -25,7 +25,7 @@ fn twohash(file_path: &str) -> Result<String> {
 }
 
 pub fn linkhash(url: &str, p: &Package) -> String {
-    let _ = create_dir(format!("/usr/ports/{}/{}/.sources/", p.repo, p.name));
+    let _ = create_dir(format!("/var/ports/{}/{}/.sources/", p.repo, p.name));
     let out = dl::dl_url(url, p).expect("Failed to download url");
     twohash(&out).expect("Failed to hash downloaded file")
 }

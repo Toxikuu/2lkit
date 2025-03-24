@@ -13,7 +13,7 @@ pub fn r#cp(from: &Package, to: &MaintArg) -> Result<()> {
 
     let to_repo = to.repo;
     let to_name = to.name;
-    let to_dir = PathBuf::from("/usr/ports").join(to.repo).join(to.name);
+    let to_dir = PathBuf::from("/var/ports").join(to.repo).join(to.name);
 
     if to_dir.exists() {
         bail!("Destination exists!")

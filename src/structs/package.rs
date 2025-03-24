@@ -51,7 +51,7 @@ impl Package {
         // Note: A space-delimited list is interpreted no different from an array for package
         // formation through bash
 
-        let command = &format!(r#"source /usr/ports/{repo}/{name}/BUILD; echo "$VERS"; echo "$DESC"; echo "${{CATG[@]}}"; echo "${{DEPS[@]}}"; echo "$SOURCE"; echo "${{EXTRA[@]}}"; echo "$UPST"; echo "$VCMD""#);
+        let command = &format!(r#"source /var/ports/{repo}/{name}/BUILD; echo "$VERS"; echo "$DESC"; echo "${{CATG[@]}}"; echo "${{DEPS[@]}}"; echo "$SOURCE"; echo "${{EXTRA[@]}}"; echo "$UPST"; echo "$VCMD""#);
         let out = sex(command).context("Failed to source BUILD")?;
 
         let lines = out.lines().map(str::trim).collect::<Vec<_>>();
@@ -105,14 +105,14 @@ impl Package {
 
     pub fn write(&self) -> Result<()> {
         let str = toml::to_string_pretty(&self)?;
-        let file_path = &format!("/usr/ports/{}/{}/LOCK", self.repo, self.name);
+        let file_path = &format!("/var/ports/{}/{}/LOCK", self.repo, self.name);
         fs::write(file_path, str)?;
 
         Ok(())
     }
 
     pub fn dir(&self) -> String {
-        format!("/usr/ports/{}/{}", self.repo, self.name)
+        format!("/var/ports/{}/{}", self.repo, self.name)
     }
 }
 

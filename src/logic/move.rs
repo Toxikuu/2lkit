@@ -13,7 +13,7 @@ pub fn r#move(from: &Package, to: &MaintArg) -> Result<()> {
 
     let to_repo = to.repo;
     let to_name = to.name;
-    let to_dir = PathBuf::from("/usr/ports").join(to.repo).join(to.name);
+    let to_dir = PathBuf::from("/var/ports").join(to.repo).join(to.name);
 
     if to_dir.exists() {
         bail!("Destination exists!")
@@ -29,7 +29,7 @@ pub fn r#move(from: &Package, to: &MaintArg) -> Result<()> {
 
     let command = &format!(r#"
         mv -v {from_dir:?} {to_dir:?}
-        cd /usr/ports/{from_repo}
+        cd /var/ports/{from_repo}
         MSG="Moved {from_repo}/{from_name} -> {to_repo}/{to_name}"
 
         git rm -r "{from_name}"

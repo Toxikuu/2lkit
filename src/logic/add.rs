@@ -12,7 +12,7 @@ pub fn add(package: &MaintArg) -> Result<()> {
     let name = package.name;
     let version = package.version.expect("Specify version :pleading:");
 
-    let dir = format!("/usr/ports/{repo}/{name}");
+    let dir = format!("/var/ports/{repo}/{name}");
 
     // TODO: Consider moving mkdir -pv <dots> here
 

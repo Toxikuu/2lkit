@@ -9,12 +9,12 @@ use crate::msg;
 pub fn alias(origin: &Package, alias: &MaintArg) -> Result<()> {
     let origin_repo = &origin.repo;
     let origin_name = &origin.name;
-    let origin_repo_dir = PathBuf::from("/usr/ports").join(&origin.repo);
+    let origin_repo_dir = PathBuf::from("/var/ports").join(&origin.repo);
     let origin_path = origin_repo_dir.join(&origin.name);
 
     let alias_repo = alias.repo;
     let alias_name = alias.name;
-    let alias_repo_dir = PathBuf::from("/usr/ports").join(&alias.repo);
+    let alias_repo_dir = PathBuf::from("/var/ports").join(&alias.repo);
     let alias_path = alias_repo_dir.join(&alias.name);
 
     if alias_path.exists() {

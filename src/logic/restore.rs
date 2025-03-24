@@ -7,7 +7,7 @@ use crate::msg;
 
 pub fn restore(package: &MaintArg, commit: &str) -> Result<()> {
     let name = &package.name;
-    let dir = PathBuf::from("/usr/ports").join(package.repo).join(name);
+    let dir = PathBuf::from("/var/ports").join(package.repo).join(name);
 
     if !dir.exists() {
         bail!("Package directory does not exist")

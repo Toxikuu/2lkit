@@ -8,7 +8,7 @@ mod utils;
 
 fn main() {
     let args = cli::args::Args::init();
-    
+
     args.generate.iter().for_each(|p| {
         let p = MaintArg::new(p);
         let mut p = Package::new(p.repo, p.name).expect("Failed to form package");
@@ -99,5 +99,8 @@ fn main() {
 
         let commit = args.restore.last().expect("Invalid syntax");
         logic::restore::restore(&p, commit).expect("Failed to restore package");
+
+        let mut p = Package::new(p.repo, p.name).expect("Failed to form package");
+        logic::r#gen::r#gen(&mut p).expect("Failed to generate package");
     }
 }

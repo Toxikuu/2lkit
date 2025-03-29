@@ -2,10 +2,10 @@ use anyhow::{Context, Result};
 use std::fs;
 use std::path::Path;
 
+use crate::msg;
 use crate::shell::interactive::sesh;
 use crate::shell::live::exec;
 use crate::structs::maintarg::MaintArg;
-use crate::msg;
 
 pub fn add(package: &MaintArg) -> Result<()> {
     let repo = package.repo;
@@ -20,7 +20,7 @@ pub fn add(package: &MaintArg) -> Result<()> {
     fs::create_dir(&dir)?;
 
     let template = format!(
-r#"NAME="{name}"
+        r#"NAME="{name}"
 VERS="{version}"
 DESC=""
 CATG=""
@@ -32,16 +32,20 @@ EXTRA=()
 
 2b() {{
 
-}}"#);
+}}"#
+    );
 
     fs::write(build_path, template)?;
-    let command = &format!(r#"
+    let command = &format!(
+        r#"
         "${{EDITOR:-/usr/bin/nvim}}" {dir}/BUILD
-    "#);
+    "#
+    );
 
     sesh(command)?;
 
-    let command = &format!(r#"
+    let command = &format!(
+        r#"
         cd "{dir}"
         MSG="Added {name}={version}"
 
@@ -53,7 +57,8 @@ EXTRA=()
 
         git add CHANGELOG
         git commit -qm "Logged $COMMIT"
-    "#);
+    "#
+    );
 
     exec(command).context("Failed to finalize addition")?;
     msg!("Done!");

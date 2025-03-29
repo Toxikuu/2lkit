@@ -1,9 +1,9 @@
-use anyhow::{bail, Result};
+use anyhow::{Result, bail};
 use std::path::PathBuf;
 
+use crate::msg;
 use crate::shell::r#static::sex;
 use crate::structs::maintarg::MaintArg;
-use crate::msg;
 
 pub fn restore(package: &MaintArg, commit: &str) -> Result<()> {
     let name = &package.name;
@@ -13,7 +13,8 @@ pub fn restore(package: &MaintArg, commit: &str) -> Result<()> {
         bail!("Package directory does not exist")
     }
 
-    let command = &format!(r#"
+    let command = &format!(
+        r#"
         cd "{dir:?}"
 
         git restore --staged --worktree --source={commit} -- $(git ls-tree -r --name-only {commit} | grep -v CHANGELOG)
@@ -28,7 +29,8 @@ pub fn restore(package: &MaintArg, commit: &str) -> Result<()> {
 
         git add CHANGELOG
         git commit -qm "Logged $COMMIT"
-    "#);
+    "#
+    );
 
     sex(command)?;
     msg!("Done!");

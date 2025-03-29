@@ -12,7 +12,10 @@ pub fn sesh(command: &str) -> Result<()> {
 
     let status = child.wait()?;
     if !status.success() {
-        bail!("Command failed with exit code {}", status.code().unwrap_or(-1));
+        bail!(
+            "Command failed with exit code {}",
+            status.code().unwrap_or(-1)
+        );
     }
 
     Ok(())

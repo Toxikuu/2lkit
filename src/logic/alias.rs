@@ -1,10 +1,10 @@
-use anyhow::{bail, Context, Result};
+use anyhow::{Context, Result, bail};
 use std::path::PathBuf;
 
+use crate::msg;
 use crate::shell::live::exec;
 use crate::structs::maintarg::MaintArg;
 use crate::structs::package::Package;
-use crate::msg;
 
 pub fn alias(origin: &Package, alias: &MaintArg) -> Result<()> {
     let origin_repo = &origin.repo;
@@ -33,7 +33,8 @@ pub fn alias(origin: &Package, alias: &MaintArg) -> Result<()> {
         bail!("Alias and origin are identical!")
     }
 
-    let command = &format!(r#"
+    let command = &format!(
+        r#"
         cd {alias_repo_dir:?}
 
         if [[ {alias_repo} == {origin_repo} ]]; then
@@ -55,7 +56,8 @@ pub fn alias(origin: &Package, alias: &MaintArg) -> Result<()> {
 
         git add {origin_path:?}/CHANGELOG
         git commit -qm "Logged $COMMIT"
-    "#);
+    "#
+    );
 
     exec(command).context("Failed to finalize alias")?;
     msg!("Done!");

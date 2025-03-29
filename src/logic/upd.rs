@@ -1,12 +1,12 @@
-use anyhow::{bail, Result};
+use anyhow::{Result, bail};
 use std::fs;
 use std::path::Path;
 
+use crate::msg;
 use crate::shell::interactive::sesh;
 use crate::shell::r#static::sex;
 use crate::structs::maintarg::MaintArg;
 use crate::structs::package::Package;
-use crate::msg;
 
 pub fn upd(package: &Package, new: &MaintArg) -> Result<String> {
     let name = &package.name;
@@ -23,11 +23,16 @@ pub fn upd(package: &Package, new: &MaintArg) -> Result<String> {
     let mut lines = contents.lines().map(|l| l.to_string()).collect::<Vec<_>>();
 
     // automatically replace the version variable
-    lines = lines.iter().map(|l| {
-        if l.starts_with(&format!("VERS=\"{old_version}\"")) {
-            format!("VERS=\"{new_version}\"")
-        } else { l.to_string() }
-    }).collect::<Vec<_>>();
+    lines = lines
+        .iter()
+        .map(|l| {
+            if l.starts_with(&format!("VERS=\"{old_version}\"")) {
+                format!("VERS=\"{new_version}\"")
+            } else {
+                l.to_string()
+            }
+        })
+        .collect::<Vec<_>>();
 
     // strip commit description if present
     lines.retain(|l| !l.starts_with("#d"));
@@ -36,10 +41,12 @@ pub fn upd(package: &Package, new: &MaintArg) -> Result<String> {
     fs::write(&build_path, contents)?;
 
     // check if any important variables were changed
-    let command = &format!(r#"
+    let command = &format!(
+        r#"
         cd "{dir}"
         "${{EDITOR:-/usr/bin/nvim}}" BUILD
-    "#);
+    "#
+    );
 
     sesh(command)?;
 
@@ -50,7 +57,8 @@ pub fn upd(package: &Package, new: &MaintArg) -> Result<String> {
     let last = lines.clone().last().unwrap();
     let desc = last.strip_prefix("#d").unwrap_or_default().trim();
 
-    let command = &format!(r#"
+    let command = &format!(
+        r#"
         cd "{dir}"
         source BUILD
 
@@ -70,7 +78,8 @@ pub fn upd(package: &Package, new: &MaintArg) -> Result<String> {
         git commit -qm "Logged $COMMIT"
 
         echo "$VERS"
-    "#);
+    "#
+    );
 
     let vers = sex(command)?;
     msg!("Done!");

@@ -11,7 +11,13 @@ pub struct Args {
     #[arg(short = 'a', long, value_name = "REPO/NAME=VERS", value_delimiter = ' ', num_args = 1..)]
     pub add: Vec<String>,
 
-    #[arg(short = 'A', long, value_name = "REPO/NAME", value_delimiter = ' ', num_args = 2)]
+    #[arg(
+        short = 'A',
+        long,
+        value_name = "REPO/NAME",
+        value_delimiter = ' ',
+        num_args = 2
+    )]
     pub alias: Vec<String>,
 
     #[arg(short = 'r', long, value_name = "REPO/NAME", value_delimiter = ' ', num_args = 1..)]
@@ -23,10 +29,22 @@ pub struct Args {
     #[arg(short = 'R', long, value_name = "REPO/NAME", value_delimiter = ' ', num_args = 1..)]
     pub remove: Vec<String>,
 
-    #[arg(short = 'm', long, value_name = "REPO/NAME", value_delimiter = ' ', num_args = 2)]
+    #[arg(
+        short = 'm',
+        long,
+        value_name = "REPO/NAME",
+        value_delimiter = ' ',
+        num_args = 2
+    )]
     pub r#move: Vec<String>,
 
-    #[arg(short = 'c', long, value_name = "REPO/NAME", value_delimiter = ' ', num_args = 2)]
+    #[arg(
+        short = 'c',
+        long,
+        value_name = "REPO/NAME",
+        value_delimiter = ' ',
+        num_args = 2
+    )]
     pub r#cp: Vec<String>,
 
     // this won't have a short version as it should (hopefully) be used rarely

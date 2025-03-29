@@ -1,11 +1,11 @@
-use anyhow::{bail, Result};
+use anyhow::{Result, bail};
 use std::fs;
 use std::path::Path;
 
+use crate::msg;
 use crate::shell::interactive::sesh;
 use crate::shell::live::exec;
 use crate::structs::package::Package;
-use crate::msg;
 
 pub fn rev(package: &Package) -> Result<()> {
     let name = &package.name;
@@ -26,7 +26,8 @@ pub fn rev(package: &Package) -> Result<()> {
     fs::write(&build_path, contents)?;
 
     // check if any important variables were changed
-    let command = &format!(r#"
+    let command = &format!(
+        r#"
         cd "{dir}"
         mkdir -p /tmp/2/m-diffs
         
@@ -46,7 +47,8 @@ pub fn rev(package: &Package) -> Result<()> {
             echo -e "\x1b[31;1mBad maintainer!!\nYou do not change \$NAME or \$VERS when revising packages.\nUse the correct flags if you want to move or update a package.\x1b[0m"
             exit 2 # bad usage
         fi
-    "#);
+    "#
+    );
 
     sesh(command)?;
 
@@ -57,7 +59,8 @@ pub fn rev(package: &Package) -> Result<()> {
     let last = lines.clone().last().unwrap();
     let desc = last.strip_prefix("#d").unwrap_or_default().trim();
 
-    let command = &format!(r#"
+    let command = &format!(
+        r#"
         cd "{dir}"
         [ -z "$(git status -s)" ] && exit 0 # don't log when nothing changed
 
@@ -75,7 +78,8 @@ pub fn rev(package: &Package) -> Result<()> {
 
         git add CHANGELOG
         git commit -qm "Logged $COMMIT"
-    "#);
+    "#
+    );
 
     exec(command)?;
     msg!("Done!");

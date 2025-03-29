@@ -9,13 +9,17 @@ pub fn r#gen(package: &mut Package) -> Result<()> {
     let version = &package.version;
 
     package.source = package.source.as_ref().map(|src| src.hash(package));
-    package.extra = package.extra.as_ref().map(|extras| extras.iter().map(|s| s.hash(package)).collect::<Vec<_>>());
+    package.extra = package
+        .extra
+        .as_ref()
+        .map(|extras| extras.iter().map(|s| s.hash(package)).collect::<Vec<_>>());
 
     msg!("Generating LOCK for {package}");
     package.write()?;
 
     let dir = package.dir();
-    let command = format!(r#"
+    let command = format!(
+        r#"
         set -x
 
         cd "{dir}"
@@ -34,7 +38,8 @@ pub fn r#gen(package: &mut Package) -> Result<()> {
 
         git add CHANGELOG
         git commit -qm "Logged $COMMIT"
-    "#);
+    "#
+    );
 
     exec(&command).context("Failed to finalize generation")?;
     msg!("Done!");

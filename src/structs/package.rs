@@ -1,10 +1,15 @@
 // src/structs/package.rs
 
-use std::{fs, fmt};
+use std::{fmt, fs};
 
+use crate::{
+    shell::r#static::sex,
+    utils::{hash::linkhash, time::timestamp},
+};
 use anyhow::{Context, Result};
 use serde::Serialize;
-use crate::{shell::r#static::sex, utils::{hash::linkhash, time::timestamp}};
+
+use super::maintarg::MaintArg;
 
 #[derive(Debug, Serialize)]
 pub struct Package {
@@ -13,7 +18,7 @@ pub struct Package {
     pub version: String,
     pub description: Option<String>, // Else "No description provided"
     pub categories: Option<Vec<String>>,
-    
+
     pub timestamp: String, // Generation timestamp
     pub dependencies: Option<Vec<String>>,
 
@@ -51,56 +56,67 @@ impl Package {
         // Note: A space-delimited list is interpreted no different from an array for package
         // formation through bash
 
-        let command = &format!(r#"source /var/ports/{repo}/{name}/BUILD; echo "$VERS"; echo "$DESC"; echo "${{CATG[@]}}"; echo "${{DEPS[@]}}"; echo "$SOURCE"; echo "${{EXTRA[@]}}"; echo "$UPST"; echo "$VCMD""#);
+        let command = &format!(
+            r#"source /var/ports/{repo}/{name}/BUILD; echo "$VERS"; echo "$DESC"; echo "${{CATG[@]}}"; echo "${{DEPS[@]}}"; echo "$SOURCE"; echo "${{EXTRA[@]}}"; echo "$UPST"; echo "$VCMD""#
+        );
         let out = sex(command).context("Failed to source BUILD")?;
 
         let lines = out.lines().map(str::trim).collect::<Vec<_>>();
-        let [
-            vers,
-            desc,
-            catg,
-            deps,
-            source,
-            extra,
-            upstream,
-            vcmd,
-        ] = &lines[..] else { panic!("Shouldn't happen lol") };
-        // let version         = lines.first().unwrap();
-        // let description     = lines.get(1).unwrap();
-        // let category        = lines.get(2).unwrap();
-        // let deps            = lines.get(3).unwrap();
-        // let source          = lines.get(4).unwrap();
-        // let extra           = lines.get(5).unwrap();
-        // let upstream        = lines.get(6).unwrap();
-        // let version_command = lines.last().unwrap();
+        let [vers, desc, catg, deps, source, extra, upstream, vcmd] = &lines[..] else {
+            panic!("Shouldn't happen lol")
+        };
 
-        let description  = if desc.is_empty() { None } else { Some(desc.to_string()) };
-        let categories   = if catg.is_empty() { None } else { Some(catg.split_whitespace().map(str::to_string).collect()) };
-        let dependencies = if deps.is_empty() { None } else { Some(deps.split_whitespace().map(str::to_string).collect()) };
+        let description = if desc.is_empty() {
+            None
+        } else {
+            Some(desc.to_string())
+        };
+        let categories = if catg.is_empty() {
+            None
+        } else {
+            Some(catg.split_whitespace().map(str::to_string).collect())
+        };
+        let dependencies = if deps.is_empty() {
+            None
+        } else {
+            Some(deps.split_whitespace().map(str::to_string).collect())
+        };
 
-        let source = if source.is_empty() { None } else { Some(Url::new(source)) };
-        let extra  = if extra.is_empty()  { None } else {
+        let source = if source.is_empty() {
+            None
+        } else {
+            Some(Url::new(source))
+        };
+        let extra = if extra.is_empty() {
+            None
+        } else {
             let links = extra.split_whitespace().collect::<Vec<_>>();
             Some(links.iter().map(|l| Url::new(l)).collect::<Vec<_>>())
         };
-        let upstream = if upstream.is_empty() { None } else { Some(upstream.to_string()) };
-        let version_command = if vcmd.is_empty() { None } else { Some(vcmd.to_string()) };
+        let upstream = if upstream.is_empty() {
+            None
+        } else {
+            Some(upstream.to_string())
+        };
+        let version_command = if vcmd.is_empty() {
+            None
+        } else {
+            Some(vcmd.to_string())
+        };
 
-        Ok(
-            Self {
-                repo: repo.to_string(),
-                name: name.to_string(),
-                version: vers.to_string(),
-                description,
-                categories,
-                timestamp: timestamp(),
-                dependencies,
-                source,
-                extra,
-                upstream,
-                version_command
-            }
-        )
+        Ok(Self {
+            repo: repo.to_string(),
+            name: name.to_string(),
+            version: vers.to_string(),
+            description,
+            categories,
+            timestamp: timestamp(),
+            dependencies,
+            source,
+            extra,
+            upstream,
+            version_command,
+        })
     }
 
     pub fn write(&self) -> Result<()> {

@@ -1,10 +1,10 @@
-use anyhow::{bail, Context, Result};
+use anyhow::{Context, Result, bail};
 use std::path::PathBuf;
 
+use crate::msg;
 use crate::shell::live::exec;
 use crate::structs::maintarg::MaintArg;
 use crate::structs::package::Package;
-use crate::msg;
 
 pub fn r#cp(from: &Package, to: &MaintArg) -> Result<()> {
     let from_repo = &from.repo;
@@ -31,7 +31,8 @@ pub fn r#cp(from: &Package, to: &MaintArg) -> Result<()> {
         bail!("Destination and origin are identical!")
     }
 
-    let command = &format!(r#"
+    let command = &format!(
+        r#"
         cp -av {from_dir:?} {to_dir:?}
         cd {to_dir:?}
         MSG="Copied {from_repo}/{from_name} -> {to_repo}/{to_name}"
@@ -47,7 +48,8 @@ pub fn r#cp(from: &Package, to: &MaintArg) -> Result<()> {
 
         git add CHANGELOG
         git commit -qm "Logged $COMMIT"
-    "#);
+    "#
+    );
 
     exec(command).context("Failed to finalize copy")?;
     msg!("Done!");

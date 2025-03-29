@@ -1,10 +1,9 @@
-use anyhow::{Result, Context, bail};
+use anyhow::{Context, Result, bail};
 use std::{
     io::{BufRead, BufReader},
     process::{Command, Stdio},
     thread,
 };
-
 
 /// # Description
 /// Executes a command
@@ -22,7 +21,7 @@ use std::{
 pub fn exec(command: &str) -> Result<()> {
     // initialize the bash environment
     let command = format!(
-    r"
+        r"
     source /usr/share/2/envs/core || exit 211
     {command}
     "

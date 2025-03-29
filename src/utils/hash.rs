@@ -1,10 +1,11 @@
 // src/utils/hash.rs
 
-use sha2::{Sha256, Digest};
 use anyhow::Result;
-use base64::{engine::general_purpose::URL_SAFE_NO_PAD, Engine};
+use base64::{Engine, engine::general_purpose::URL_SAFE_NO_PAD};
+use sha2::{Digest, Sha256};
 use std::{
-    fs::{create_dir, File}, io::Read
+    fs::{File, create_dir},
+    io::Read,
 };
 
 use crate::structs::package::Package;
@@ -17,7 +18,9 @@ fn twohash(file_path: &str) -> Result<String> {
     let mut buf = [0u8; 8192];
 
     while let Ok(n) = file.read(&mut buf) {
-        if n == 0 { break }
+        if n == 0 {
+            break;
+        }
         hasher.update(&buf[..n]);
     }
 

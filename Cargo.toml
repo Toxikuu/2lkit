@@ -1,6 +1,6 @@
 [package]
 name = "twolkit"
-version = "0.3.2" # /usr/ports -> /var/ports && updated dependencies
+version = "0.4.0" # Added and used from MaintArg for Package, added view
 edition = "2024"
 description = "Maintainer utilities for 2"
 repository = "https://github.com/Toxikuu/2"

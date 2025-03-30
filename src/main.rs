@@ -31,6 +31,11 @@ fn main() {
         logic::r#gen::r#gen(&mut p.reform()).expect("Failed to generate package");
     });
 
+    args.view.iter().for_each(|p| {
+        let p: Package = MaintArg::new(p).into();
+        logic::view::view(&p).expect("Failed to view package");
+    });
+
     args.update.iter().for_each(|p| {
         let new = MaintArg::new(p);
         let old: Package = new.into();

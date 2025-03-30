@@ -8,3 +8,4 @@ pub mod restore;
 pub mod rev;
 pub mod rm;
 pub mod upd;
+pub mod view;

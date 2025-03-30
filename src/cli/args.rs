@@ -23,6 +23,9 @@ pub struct Args {
     #[arg(short = 'r', long, value_name = "REPO/NAME", value_delimiter = ' ', num_args = 1..)]
     pub revise: Vec<String>,
 
+    #[arg(short = 'v', long, value_name = "REPO/NAME", value_delimiter = ' ', num_args = 1..)]
+    pub view: Vec<String>,
+
     #[arg(short = 'u', long, value_name = "REPO/NAME=VERS", value_delimiter = ' ', num_args = 1..)]
     pub update: Vec<String>,
 

@@ -130,10 +130,20 @@ impl Package {
     pub fn dir(&self) -> String {
         format!("/var/ports/{}/{}", self.repo, self.name)
     }
+
+    pub fn reform(&self) -> Self {
+        Self::new(&self.repo, &self.name).expect("Failed to reform package")
+    }
 }
 
 impl fmt::Display for Package {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}/{}={}", self.repo, self.name, self.version)
+    }
+}
+
+impl<'a> From<MaintArg<'a>> for Package {
+    fn from(ma: MaintArg) -> Self {
+        Self::new(ma.repo, ma.name).expect("Failed to form package")
     }
 }

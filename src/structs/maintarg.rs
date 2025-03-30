@@ -1,6 +1,6 @@
 // src/structs/maintarg.rs
 
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct MaintArg<'a> {
     pub repo: &'a str,
     pub name: &'a str,

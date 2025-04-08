@@ -1,6 +1,6 @@
 [package]
 name = "twolkit"
-version = "0.4.0" # Added and used from MaintArg for Package, added view
+version = "0.4.1" # Added new-repo && updated dependencies
 edition = "2024"
 description = "Maintainer utilities for 2"
 repository = "https://github.com/Toxikuu/2lkit"

@@ -1,3 +1,4 @@
+use logic::newrepo;
 use structs::{maintarg::MaintArg, package::Package};
 
 mod cli;
@@ -94,5 +95,9 @@ fn main() {
         logic::restore::restore(&p, commit).expect("Failed to restore package");
 
         logic::r#gen::r#gen(&mut p.into()).expect("Failed to generate package");
+    }
+
+    if let Some(new_repo) = args.new_repo {
+        newrepo::newrepo(&new_repo).expect("Failed to create new repo")
     }
 }

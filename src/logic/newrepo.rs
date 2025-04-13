@@ -23,6 +23,8 @@ pub fn newrepo(url: &str) -> Result<()> {
         r#"
         cd {dir:?}
         echo '*/.*' > .gitignore
+        echo 'shell=bash' > .shellcheckrc
+        echo 'disable=SC2034' >> .shellcheckrc
 
         echo '# {repo_name}' > README.md
         curl -fsSL -o LICENSE 'https://www.gnu.org/licenses/gpl-3.0.txt'
